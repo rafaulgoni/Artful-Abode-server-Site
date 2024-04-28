@@ -30,7 +30,6 @@ async function run() {
 
     const artCollection = client.db('artDB').collection('art');
     const userCollection = client.db('artDB').collection('user');
-    // const pantingCollection = client.db('artDB').collection('panting');
 
 
     app.get('/art', async (req, res) => {
@@ -49,6 +48,8 @@ async function run() {
       const result = await artCollection.insertOne(newArt);
       res.send(result);
     })
+
+
     //All Craft Items
 
     app.get('/user', async (req, res) => {
@@ -75,6 +76,13 @@ async function run() {
       res.send(result);
     });
 
+
+    app.delete('/user/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await userCollection.deleteOne(query);
+      res.send(result);
+  })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
