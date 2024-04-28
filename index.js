@@ -30,6 +30,7 @@ async function run() {
 
     const artCollection = client.db('artDB').collection('art');
     const userCollection = client.db('artDB').collection('user');
+    // const pantingCollection = client.db('artDB').collection('panting');
 
 
     app.get('/art', async (req, res) => {
@@ -45,7 +46,6 @@ async function run() {
     })
     app.post('/art', async (req, res) => {
       const newArt = req.body;
-      console.log(newArt);
       const result = await artCollection.insertOne(newArt);
       res.send(result);
     })
@@ -64,12 +64,16 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/data/:email', async (req, res) => {
+      const result = await userCollection.find({email: req.params.email}).toArray();
+      res.send(result);
+    })
+
     app.post('/user', async (req, res) => {
       const user = req.body;
-      console.log(user);
       const result = await userCollection.insertOne(user);
       res.send(result);
-  });
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
