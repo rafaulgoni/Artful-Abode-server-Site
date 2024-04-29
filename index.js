@@ -49,7 +49,6 @@ async function run() {
       res.send(result);
     })
 
-
     //All Craft Items
 
     app.get('/user', async (req, res) => {
@@ -76,6 +75,28 @@ async function run() {
       res.send(result);
     });
 
+    app.put('/user/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) }
+      const options = { upsert: true };
+      const updatedCraft = req.body;
+
+      const Craft = {
+          $set: {
+              name: updatedCraft.name,
+              subcategory: updatedCraft.subcategory,
+              description: updatedCraft.description,
+              price: updatedCraft.price,
+              rating: updatedCraft.rating,
+              customization: updatedCraft.customization,
+              time: updatedCraft.time,
+              status: updatedCraft.status,
+              image: updatedCraft.image
+          }
+      }
+      const result = await userCollection.updateOne(filter, Craft, options);
+      res.send(result);
+  })
 
     app.delete('/user/:id', async (req, res) => {
       const id = req.params.id;
@@ -92,9 +113,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
-
-
 
 app.get('/', (req, res) => {
   res.send('B9 A10 Type-02 Requirements')
